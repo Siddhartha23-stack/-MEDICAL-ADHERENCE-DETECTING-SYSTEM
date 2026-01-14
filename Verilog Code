@@ -1,0 +1,117 @@
+  IMPLEMENTATION OF  VERILOG CODE 
+// Project: Drug Interaction Checker 
+// Description: Detects unsafe drug combinations using simple logic design. 
+// Drugs Used: 
+//   1. Paracetamol 
+//   2. Alcohol 
+//   3. Antihistamine 
+//   4. Cough Syrup 
+//   5. Metformin 
+ 
+module drug_checker( 
+    input Paracetamol, 
+    input Alcohol, 
+    input Antihistamine, 
+    input Cough_Syrup, 
+    input Metformin, 
+    output Unsafe_Flag, 
+    output Safe_Flag 
+); 
+ 
+    // Unsafe combinations: 
+    // 1. Paracetamol + Alcohol  → Liver damage risk 
+    // 2. Antihistamine + Cough Syrup → Drowsiness risk 
+    // 3. Metformin + Alcohol → Lactic acidosis / low blood sugar
+    assign Unsafe_Flag = (Paracetamol && Alcohol) ||  
+                         (Antihistamine && Cough_Syrup) ||  
+                         (Metformin && Alcohol); 
+ 
+    assign Safe_Flag = ~Unsafe_Flag; 
+ 
+endmodule       
+
+-----------------------------------------------------------------------------
+
+// Testbench for Drug Interaction Checker 
+// ----------------------------------------------------------------------------- 
+ 
+`timescale 1ns / 1ps 
+ 
+module tb_drug_checker(); 
+ 
+    reg Paracetamol, Alcohol, Antihistamine, Cough_Syrup, Metformin; 
+    wire Unsafe_Flag, Safe_Flag; 
+ 
+    // Instantiate the DUT (Device Under Test) 
+    drug_checker x1( 
+        .Paracetamol(Paracetamol), 
+        .Alcohol(Alcohol), 
+        .Antihistamine(Antihistamine), 
+        .Cough_Syrup(Cough_Syrup), 
+        .Metformin(Metformin), 
+        .Unsafe_Flag(Unsafe_Flag), 
+        .Safe_Flag(Safe_Flag) 
+    ); 
+ 
+    initial begin
+   $display("Para  Alc  Anti  Cough  Met | Unsafe  Safe"); 
+        $display("-------------------------------------------"); 
+ 
+        Paracetamol=0; Alcohol=0; Antihistamine=0; Cough_Syrup=0; Metformin=0; 
+#10  
+        $display("%b     %b     %b      %b      %b   |   %b      %b", 
+Paracetamol,Alcohol,Antihistamine,Cough_Syrup,Metformin,Unsafe_Flag,Safe_Flag)
+; 
+ 
+        Paracetamol=1; Alcohol=1; Antihistamine=0; Cough_Syrup=0; Metformin=0; 
+#10  
+        $display("%b     %b     %b      %b      %b   |   %b      %b", 
+Paracetamol,Alcohol,Antihistamine,Cough_Syrup,Metformin,Unsafe_Flag,Safe_Flag)
+; 
+ 
+        Paracetamol=0; Alcohol=1; Antihistamine=1; Cough_Syrup=1; Metformin=0; 
+#10  
+        $display("%b     %b     %b      %b      %b   |   %b      %b", 
+Paracetamol,Alcohol,Antihistamine,Cough_Syrup,Metformin,Unsafe_Flag,Safe_Flag)
+; 
+ 
+        Paracetamol=0; Alcohol=1; Antihistamine=0; Cough_Syrup=1; Metformin=1; 
+#10  
+        $display("%b     %b     %b      %b      %b   |   %b      %b", 
+Paracetamol,Alcohol,Antihistamine,Cough_Syrup,Metformin,Unsafe_Flag,Safe_Flag)
+; 
+ 
+        Paracetamol=0; Alcohol=0; Antihistamine=1; Cough_Syrup=1; Metformin=0; 
+#10  
+        $display("%b     %b     %b      %b      %b   |   %b      %b", 
+Paracetamol,Alcohol,Antihistamine,Cough_Syrup,Metformin,Unsafe_Flag,Safe_Flag)
+; 
+ 
+        Paracetamol=1; Alcohol=0; Antihistamine=0; Cough_Syrup=0; Metformin=1; 
+#10  
+    $display("%b     %b     %b      %b      %b   |   %b      %b", 
+Paracetamol,Alcohol,Antihistamine,Cough_Syrup,Metformin,Unsafe_Flag,Safe_Flag)
+; 
+ 
+        Paracetamol=0; Alcohol=0; Antihistamine=0; Cough_Syrup=0; Metformin=1; 
+#10  
+        $display("%b     %b     %b      %b      %b   |   %b      %b", 
+Paracetamol,Alcohol,Antihistamine,Cough_Syrup,Metformin,Unsafe_Flag,Safe_Flag)
+; 
+ 
+        Paracetamol=1; Alcohol=0; Antihistamine=1; Cough_Syrup=0; Metformin=0; 
+#10  
+        $display("%b     %b     %b      %b      %b   |   %b      %b", 
+Paracetamol,Alcohol,Antihistamine,Cough_Syrup,Metformin,Unsafe_Flag,Safe_Flag)
+; 
+ 
+        Paracetamol=0; Alcohol=0; Antihistamine=0; Cough_Syrup=1; Metformin=0; 
+#10  
+        $display("%b     %b     %b      %b      %b   |   %b      %b", 
+Paracetamol,Alcohol,Antihistamine,Cough_Syrup,Metformin,Unsafe_Flag,Safe_Flag);
+
+ 
+  #10  $finish; 
+    end 
+ 
+endmodule
